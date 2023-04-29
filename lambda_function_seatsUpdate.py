@@ -11,11 +11,15 @@ def lambda_handler(event, context):
 
 #スキャンで取得したすべてのアイテムをのうち、seatTypeが5or6以外のレコードをUPDATEする
     for record in records:
-        if record['seatType']  in [5, 6]:
+        if record['seatType']  == 6:
             continue
 # 更新するフィールドと値を指定
-        update_expression= 'Set seatedStatus = :v1, seatedAt = :v2, employeeId = :v3, employeeFamilyName = :v4, employeeGivenName = :v5, company = :v6, phoneNumber = :v7, team = :v8'
-        expression_attribute_values = {':v1': False, ':v2': None, ':v3': None, ':v4': None,':v5': None, ':v6': None, ':v7': None, ':v8': None}
+        elif record['seatType'] == 5:
+            update_expression= 'Set seatedStatus = :v1, seatedAt = :v2'
+            expression_attribute_values = {':v1': False, ':v2': None}
+        else:
+            update_expression= 'Set seatedStatus = :v1, seatedAt = :v2, employeeId = :v3, employeeFamilyName = :v4, employeeGivenName = :v5, company = :v6, phoneNumber = :v7, team = :v8'
+            expression_attribute_values = {':v1': False, ':v2': None, ':v3': None, ':v4': None,':v5': None, ':v6': None, ':v7': None, ':v8': None}      
 # アップデートのリクエストを作成
         update_request = {
         'Key': {'seatId': record['seatId']},
